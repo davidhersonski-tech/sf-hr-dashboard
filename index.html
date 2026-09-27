@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HR Dashboard</title>
+  <style>
+    :root { color-scheme: dark; --ink:#f8fcff; --muted:#c7e3ee; --panel:rgba(255,255,255,.16); --panel-hover:rgba(255,255,255,.24); --line:rgba(255,255,255,.30); --cyan:#8de5ff; --shadow:0 18px 45px rgba(2,18,31,.30); }
+    * { box-sizing:border-box; }
+    html,body { margin:0; min-height:100%; }
+    body { min-height:100vh; padding:28px; overflow-x:hidden; font-family:Inter,"72","Segoe UI",Arial,sans-serif; color:var(--ink); background-color:#073653; background-image:linear-gradient(135deg,rgba(5,38,63,.92),rgba(9,106,140,.77)),url("background.svg"); background-position:center; background-size:cover; }
+    .dashboard { width:min(100%,760px); margin:0 auto; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; padding:6px 11px; border:1px solid rgba(173,234,255,.40); border-radius:999px; background:rgba(101,211,245,.13); color:#d5f6ff; font-size:11px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+    .eyebrow::before { width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 12px var(--cyan); content:""; }
+    h1 { margin:13px 0 6px; font-size:clamp(28px,5vw,42px); line-height:1.05; letter-spacing:-.035em; }
+    .intro { max-width:590px; margin:0 0 24px; color:var(--muted); font-size:15px; line-height:1.55; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .card { position:relative; min-height:138px; padding:18px; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--panel); box-shadow:var(--shadow); color:var(--ink); text-decoration:none; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); transition:transform .18s ease,background-color .18s ease,border-color .18s ease; }
+    .card::after { position:absolute; right:14px; bottom:10px; color:rgba(255,255,255,.55); font-size:22px; content:"→"; transition:transform .18s ease,color .18s ease; }
+    .card:hover,.card:focus-visible { transform:translateY(-3px); border-color:rgba(183,239,255,.66); background:var(--panel-hover); outline:none; }
+    .card:hover::after,.card:focus-visible::after { transform:translateX(3px); color:#fff; }
+    .icon { display:grid; width:38px; height:38px; place-items:center; border:1px solid rgba(255,255,255,.26); border-radius:12px; background:rgba(8,52,78,.28); font-size:21px; }
+    .card h2 { margin:13px 0 4px; font-size:17px; line-height:1.2; }
+    .card p { max-width:calc(100% - 30px); margin:0; color:#c8e4ed; font-size:12px; line-height:1.42; }
+    .footer { display:flex; justify-content:space-between; gap:12px; margin-top:17px; padding:13px 4px 0; border-top:1px solid rgba(255,255,255,.19); color:#b9dce8; font-size:11px; }
+    @media (max-width:560px) { body{padding:20px}.grid{grid-template-columns:1fr}.card{min-height:124px}.footer{display:block}.footer span:last-child{display:block;margin-top:4px} }
+    @media (prefers-reduced-motion:reduce) { .card,.card::after{transition:none} }
+  </style>
+</head>
+<body>
+  <main class="dashboard">
+    <div class="eyebrow">HR Portal</div>
+    <h1>HR Dashboard</h1>
+    <p class="intro">Die wichtigsten Bereiche für Profil, Organisation, Workflows und Weiterbildung – direkt erreichbar.</p>
+    <section class="grid" aria-label="HR-Schnellzugriffe">
+      <a class="card" id="profileLink" href="#" target="_top"><span class="icon" aria-hidden="true">👤</span><h2>Mein Profil</h2><p>Eigene Personal- und Profildaten öffnen</p></a>
+      <a class="card" id="orgLink" href="#" target="_top"><span class="icon" aria-hidden="true">🏢</span><h2>Organigramm</h2><p>Organisation ab Unternehmensleitung anzeigen</p></a>
+      <a class="card" id="workflowLink" href="#" target="_top"><span class="icon" aria-hidden="true">✓</span><h2>Workflows</h2><p>Ausstehende Genehmigungen und Anfragen prüfen</p></a>
+      <a class="card" href="https://learning.sap.com" target="_blank" rel="noopener noreferrer"><span class="icon" aria-hidden="true">🎓</span><h2>SAP Learning</h2><p>Kurse, Lernpfade und Zertifizierungen öffnen</p></a>
+    </section>
+    <footer class="footer"><span>Für die mittlere SuccessFactors-Popover-Breite optimiert</span><span>HR · Schnellzugriff</span></footer>
+  </main>
+  <script>
+    (() => {
+      const options=new URLSearchParams(location.hash.slice(1));
+      const referrerOrigin=document.referrer?new URL(document.referrer).origin:"";
+      const sfOrigin=options.get("origin")||referrerOrigin;
+      const ceo=options.get("ceo")||"";
+      document.getElementById("profileLink").href=sfOrigin+"/sf/liveprofile";
+      document.getElementById("workflowLink").href=sfOrigin+"/sf/pendingworkflows";
+      document.getElementById("orgLink").href=sfOrigin+"/sf/orgchart"+(ceo?"?selected_user_encoded="+encodeURIComponent(ceo):"");
+    })();
+  </script>
+</body>
+</html>
